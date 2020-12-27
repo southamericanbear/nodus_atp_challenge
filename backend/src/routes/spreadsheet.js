@@ -66,7 +66,6 @@ const getChamps = async (client) => {
     rgWinners[0][1],
     lastTimeWonHistoricChampRg
   );
-  console.log(resRG);
 };
 
 const filterTournament = (tournamentArchive, atp_id) => {
