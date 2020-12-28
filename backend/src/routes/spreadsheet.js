@@ -4,7 +4,6 @@ const router = Router();
 const { google } = require("googleapis");
 const keys = require("../client_secret.json");
 const spreadsheetID = process.env.SPREADSHEET_ID;
-const { saveLogs, getLogs } = require("../controller/databaseLogs");
 
 const client = new google.auth.JWT(keys.client_email, null, keys.private_key, [
   "https://www.googleapis.com/auth/spreadsheets.readonly",
@@ -12,15 +11,10 @@ const client = new google.auth.JWT(keys.client_email, null, keys.private_key, [
 
 client.authorize((err) => {
   if (err) {
-    console.log(err);
-    saveLogs(
-      "Something wrong occurred trying to connect spreadsheets",
-      "Error"
-    );
+    console.log(err, "Something wrong occurred trying to connect spreadsheets");
     return;
   } else {
     console.log("Successfully connected to Google Sheet's");
-    saveLogs("Succesfully connected to spreadsheets", "Success");
     getChamps(client);
   }
 });
@@ -101,36 +95,23 @@ const joinData = (player, wins, date) => {
 };
 
 router.route("/usopen").get((req, res) => {
-  saveLogs(req.url, "Success");
   console.log("Us Open data requested");
   res.send(resUsO);
 });
 
 router.route("/wimbledon").get((req, res) => {
-  saveLogs(req.url, "Success");
   console.log("Wimbledon data requested");
   res.send(resWim);
 });
 
 router.route("/ausopen").get((req, res) => {
-  saveLogs(req.url, "Success");
   console.log("Australian Open data requested");
   res.send(resAussie);
 });
 
 router.route("/rolandgarros").get((req, res) => {
-  saveLogs(req.url, "Success");
   console.log("Rolang Garros data requested");
   res.send(resRG);
-});
-
-router.route("/").get(async (req, res, next) => {
-  try {
-    const logs = await getLogs();
-    res.json(logs);
-  } catch (err) {
-    console.log(err);
-  }
 });
 
 module.exports = router;
